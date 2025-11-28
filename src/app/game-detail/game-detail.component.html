@@ -1,0 +1,54 @@
+
+<div class="game-detail-container" fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAlign="center center">
+    <div class="game-image" fxFlex="40">
+      <img [src]="game.image" alt="{{ game.title }} image">
+    </div>
+  
+    <div class="game-info" fxFlex="50" fxLayout="column" fxLayoutGap="1rem">
+      <h2>{{ game.title }}</h2>
+      <p>{{ game.description }}</p>
+      <div class="rating-stars">
+        <ng-container *ngFor="let star of fullStars">&#9733;</ng-container>
+        <ng-container *ngIf="halfStar">&#9733;</ng-container>
+        <ng-container *ngFor="let star of emptyStars">&#9734;</ng-container>
+      </div>
+      <div class="price">
+        Price: {{ game.price }}$
+      </div>
+      <button mat-raised-button color="primary" (click)="addToCart()">Add to Cart</button>
+    </div>
+  
+    <div class="game-reviews" fxFlex="100">
+      <h3>Reviews</h3>
+      <mat-card *ngFor="let review of game.reviews" class="review-card">
+        <mat-card-title>{{ review.username }}</mat-card-title>
+        <mat-card-content>
+          <p>{{ review.comment }}</p>
+          <span>Rating: {{ review.rating }} / 5</span>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div *ngIf="isLoggedIn" fxFlex="100" class="add-review">
+      <h3>Add Your Review</h3>
+      <mat-form-field appearance="fill">
+        <mat-label>Your Comment</mat-label>
+        <textarea matInput [(ngModel)]="newReview.comment"></textarea>
+      </mat-form-field>
+    
+      <mat-form-field appearance="fill">
+        <mat-label>Rating</mat-label>
+        <mat-select [(ngModel)]="newReview.rating">
+          <mat-option *ngFor="let r of [5, 4, 3, 2, 1]" [value]="r">{{ r }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    
+      <button mat-raised-button color="accent" (click)="submitReview()">Submit Review</button>
+    </div>
+    
+    <div *ngIf="!isLoggedIn" fxFlex="100" class="login-reminder">
+      <p><i>You need to be logged in to leave a review.</i></p>
+    </div>
+    
+</div>
+  

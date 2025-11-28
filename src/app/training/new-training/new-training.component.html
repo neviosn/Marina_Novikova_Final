@@ -1,0 +1,27 @@
+<section fxLayout fxLayoutAlign="center">
+
+    <mat-card fxFlex="500px">
+        <mat-card-title fxLayoutAlign="center">
+            Start training
+        </mat-card-title>
+
+        <mat-card-content fxLayoutAlign="center" fxLayoutGap="20px">
+            <mat-select placeholder="Choose exercise:">
+                <mat-option value="walking">
+                    Walking
+                </mat-option>
+                <mat-option value="running">
+                    Running
+                </mat-option>
+                <mat-option value="squats">
+                    Squats
+                </mat-option>
+            </mat-select>  
+        </mat-card-content>
+
+        <mat-card-actions fxLayoutAlign="center">
+            <button type="submit" mat-raised-button (click)="onStartTraining()">Start</button>
+        </mat-card-actions>
+    </mat-card>
+
+</section>

@@ -1,0 +1,52 @@
+mat-sidenav-container, mat-sidenav-content,
+mat-sidenav {
+    height: 100%;
+}
+
+mat-sidenav {
+    width:  15rem;
+}
+
+a {
+    color: #ffffff;
+    text-decoration: none;
+    font-family: 'Orbitron';
+}
+
+a:hover, a:active {
+    color: #fda50c;
+}
+
+.search-field {
+    min-width: 200px;
+    max-width: 300px;
+  }
+  
+  .user-link {
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+  }
+  .user-link:hover {
+    text-decoration: underline;
+  }
+  
+
+  .top-toolbar {
+    display: flex;
+    padding: 1rem 2rem;
+    background-color: #121212;
+  }
+  
+  .logo-text {
+    font-size: 28px;
+    font-weight: 800;
+    color: white;
+  }
+  
+  .top-links a, .user-link {
+    font-weight: bold;
+    color: white;
+    font-size: 16px;
+  }
+  

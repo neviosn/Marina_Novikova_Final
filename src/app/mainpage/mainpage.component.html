@@ -1,0 +1,57 @@
+<div class="main-container">
+
+  <div class="search-bar">
+    <input type="text" class="search-input" [(ngModel)]="searchTerm" placeholder="Find a game" />
+  
+    <div class="filter-wrapper">
+      <button class="filter-btn" (click)="toggleFilter()">Filter</button>
+  
+      <div *ngIf="showFilter" class="filter-popup">
+        <h3>Select Categories</h3>
+        <div class="checkbox-list">
+          <label *ngFor="let cat of categories">
+            <input type="checkbox" [(ngModel)]="cat.selected" />
+            {{ cat.name }}
+          </label>
+        </div>
+        <button (click)="applyGenreFilter()">Apply</button>
+      </div>
+    </div>
+  </div>
+  
+  
+  <section class="catalog">
+    <h2>- - All Games - -</h2>
+    <div class="game-grid">
+      <div class="game-card"
+           *ngFor="let game of (filteredGames.length ? filteredGames : games) | searchFilter:searchTerm"
+           (click)="goToGame(game.id)">
+        <img [src]="game.image" alt="{{ game.title }}" />
+        <h3>{{ game.title }}</h3>
+      </div>
+    </div>
+  </section>
+
+  
+
+  <ng-container *ngIf="!searchTerm && filteredGames.length === games.length">
+    <section *ngFor="let category of categories" class="carousel-section">
+      <h2>{{ category.name }}</h2>
+  
+      <div class="carousel">
+        <button class="arrow" (click)="cycleLeft(category)">←</button>
+  
+        <div class="carousel-track">
+          <div class="game-card" *ngFor="let game of category.games" (click)="goToGame(game.id)">
+            <img [src]="game.image" />
+            <h3>{{ game.title }}</h3>
+          </div>
+        </div>
+  
+        <button class="arrow" (click)="cycleRight(category)">→</button>
+      </div>
+    </section>
+  </ng-container>
+  
+
+</div>

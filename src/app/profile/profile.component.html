@@ -1,0 +1,37 @@
+<div class="profile-container" *ngIf="user">
+    <h2>Welcome, {{ user.name || 'Gamer' }}</h2>
+  
+    <mat-card class="profile-card">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="user.name" placeholder="Enter your name">
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" disabled>
+        <mat-label>Email</mat-label>
+        <input matInput [value]="user.email" readonly>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Favorite Genre</mat-label>
+        <mat-select [(ngModel)]="user.favoriteGenre">
+          <mat-option *ngFor="let genre of genres" [value]="genre">{{ genre }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <button mat-raised-button color="accent" (click)="saveProfile()">Save</button>
+    </mat-card>
+  
+    <div class="my-games" *ngIf="purchasedGames.length > 0">
+      <h3>My Games</h3>
+      <div class="game-grid">
+        <div class="game-card" *ngFor="let game of purchasedGames">
+          <img [src]="game.image" [alt]="game.title" />
+          <h4>{{ game.title }}</h4>
+        </div>
+      </div>
+    </div>
+  
+    <p *ngIf="purchasedGames.length === 0" class="empty-msg">No purchased games yet.</p>
+  </div>
+  

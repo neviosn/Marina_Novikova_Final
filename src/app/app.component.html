@@ -1,0 +1,42 @@
+
+
+<mat-sidenav-container fullscreen>
+
+    <mat-sidenav #sidenav mode="side" fxHide fxShow.gt-xs>
+      <p><a routerLink="/">Home</a></p>
+      <p><a routerLink="/training">Training</a></p>
+    </mat-sidenav>
+  
+    <mat-sidenav-content>
+  
+      <mat-toolbar color="primary" class="top-toolbar">
+
+        <a routerLink="/mainpage" style="text-decoration: none; color: inherit;">
+          <span class="logo-text">GameStore</span>
+        </a>
+      
+        <span fxFlex></span>
+      
+        <div fxLayout fxLayoutAlign="end center" fxLayoutGap="20px" fxHide.xs class="top-links">
+          <ng-container *ngIf="userEmail; else guestLinks">
+            <a mat-button routerLink="/profile" class="user-link">Welcome, {{ userEmail }}</a>
+            <a mat-button routerLink="/cart">Cart</a>
+            <a mat-button (click)="logout()">Logout</a>
+          </ng-container>
+      
+          <ng-template #guestLinks>
+            <a mat-button routerLink="/signup">Signup</a>
+            <a mat-button routerLink="/login">Login</a>
+          </ng-template>
+        </div>
+      
+      </mat-toolbar>
+      
+    <router-outlet></router-outlet>
+  
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  
+
+  
+  

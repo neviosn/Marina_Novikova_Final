@@ -1,0 +1,66 @@
+
+.game-detail-container {
+    padding: 2rem;
+    color: white;
+    background-color: #121212;
+  }
+  
+  .game-image img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  }
+  
+  .game-info h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .game-info p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .price {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+  }
+  
+  .rating-stars {
+    font-size: 1.5rem;
+    color: #ffc107;
+    margin-top: 0.5rem;
+  }
+  
+  
+  button {
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+  
+  .review-card {
+    background-color: #1e1e1e;
+    color: white;
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .review-card mat-card-title {
+    font-weight: bold;
+  }
+  
+  .review-card mat-card-content p {
+    margin-bottom: 0.5rem;
+  }
+  
+  .add-review {
+    margin-top: 2rem;
+  }
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  

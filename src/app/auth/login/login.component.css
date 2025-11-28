@@ -1,0 +1,27 @@
+.login-container {
+  min-height: 100vh;
+  background-color: #0f0f0f;
+}
+
+.login-card {
+  max-width: 480px;
+  width: 100%;
+  padding: 3rem 2.5rem;
+  background-color: #1a1a1a;
+  color: white;
+  border-radius: 1.25rem;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 32px rgba(0, 0, 0, 0.8);
+}
+
+.login-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 26px;
+  text-align: center;
+  margin-bottom: 2rem;
+}

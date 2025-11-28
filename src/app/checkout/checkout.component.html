@@ -1,0 +1,58 @@
+<div class="checkout-container">
+  <mat-card class="checkout-card">
+    <h2 class="checkout-title">Checkout</h2>
+
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+      <p>Your cart is empty. <a routerLink="/mainpage">Continue shopping</a></p>
+    </div>
+
+    <div *ngIf="cartItems.length > 0">
+      <h3 class="section-title">Order Summary</h3>
+      <ul class="cart-list">
+        <li *ngFor="let game of cartItems">
+          {{ game.title }} — <span class="price">{{ game.price | currency }}</span>
+        </li>
+      </ul>
+      <p class="total"><strong>Total:</strong> {{ total | currency }}</p>
+
+      <h3 class="section-title">Payment Details</h3>
+      <form (ngSubmit)="placeOrder()" #checkoutForm="ngForm" class="payment-form">
+        <mat-form-field appearance="fill">
+          <mat-label>Name on Card</mat-label>
+          <input matInput [(ngModel)]="paymentInfo.name" name="name" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Name on Card</mat-label>
+          <input matInput [(ngModel)]="paymentInfo.name" name="name" required #nameInput="ngModel" />
+          <mat-hint align="end">{{ nameInput.value?.length || 0 }} / 50</mat-hint>
+        </mat-form-field>
+        
+        <mat-form-field appearance="fill">
+          <mat-label>Card Number</mat-label>
+          <input matInput maxlength="16" [(ngModel)]="paymentInfo.cardNumber" name="cardNumber" required #cardInput="ngModel" />
+          <mat-hint align="end">{{ cardInput.value?.length || 0 }} / 16</mat-hint>
+        </mat-form-field>
+        
+        <div fxLayout="row" fxLayoutGap="1rem">
+          <mat-form-field appearance="fill" fxFlex>
+            <mat-label>Expiry Date</mat-label>
+            <input matInput placeholder="MM/YY" [(ngModel)]="paymentInfo.expiry" name="expiry" required #expiryInput="ngModel" />
+            <mat-hint align="end">{{ expiryInput.value?.length || 0 }} / 5</mat-hint>
+          </mat-form-field>
+        
+          <mat-form-field appearance="fill" fxFlex>
+            <mat-label>CVV</mat-label>
+            <input matInput type="password" maxlength="4" [(ngModel)]="paymentInfo.cvv" name="cvv" required #cvvInput="ngModel" />
+            <mat-hint align="end">{{ cvvInput.value?.length || 0 }} / 4</mat-hint>
+          </mat-form-field>
+        </div>
+        
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="!checkoutForm.valid">
+          Place Order
+        </button>
+      </form>
+    </div>
+  </mat-card>
+</div>

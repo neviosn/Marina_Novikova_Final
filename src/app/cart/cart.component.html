@@ -1,0 +1,27 @@
+
+<div class="cart-container">
+    <h2>Your Cart</h2>
+  
+    <div *ngIf="cartItems.length === 0">
+      <p>Your cart is empty.</p>
+    </div>
+  
+    <div *ngIf="cartItems.length > 0">
+      <div class="cart-item" *ngFor="let game of cartItems">
+        <img [src]="game.image" alt="{{ game.title }}" />
+        <div class="info">
+          <h3>{{ game.title }}</h3>
+          <p>{{ game.description }}</p>
+          <p><strong>Price:</strong> {{ game.price | currency }}</p>
+          <button (click)="remove(game.id)">Remove</button>
+        </div>
+      </div>
+  
+      <div class="cart-summary">
+        <h3>Total: {{ total | currency }}</h3>
+        <button (click)="clear()" class="cart-btn">Clear Cart</button>
+        <a routerLink="/checkout" class="cart-btn">Buy</a>
+      </div>
+    </div>
+  </div>
+  
