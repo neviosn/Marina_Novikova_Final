@@ -21,10 +21,30 @@
     <div class="game-reviews" fxFlex="100">
       <h3>Reviews</h3>
       <mat-card *ngFor="let review of game.reviews" class="review-card">
-        <mat-card-title>{{ review.username }}</mat-card-title>
+        <mat-card-title>{{ review.email || review.username }}</mat-card-title>
         <mat-card-content>
-          <p>{{ review.comment }}</p>
-          <span>Rating: {{ review.rating }} / 5</span>
+          <ng-container *ngIf="editingReview?.id !== review.id">
+            <p>{{ review.comment }}</p>
+            <span>Rating: {{ review.rating }} / 5</span>
+            <div *ngIf="isLoggedIn && review.user_id === currentUserId" style="margin-top: 8px;">
+              <button mat-button color="primary" (click)="startEdit(review)">Edit</button>
+              <button mat-button color="warn" (click)="deleteReview(review.id!)">Delete</button>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="editingReview?.id === review.id">
+            <mat-form-field appearance="fill">
+              <textarea matInput [(ngModel)]="editingReview.comment"></textarea>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-select [(ngModel)]="editingReview.rating">
+                <mat-option *ngFor="let r of [5, 4, 3, 2, 1]" [value]="r">{{ r }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div>
+              <button mat-button color="primary" (click)="saveEdit()">Save</button>
+              <button mat-button (click)="cancelEdit()">Cancel</button>
+            </div>
+          </ng-container>
         </mat-card-content>
       </mat-card>
     </div>

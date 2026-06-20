@@ -15,15 +15,15 @@ export class LoginComponent {
 
   onLogin(form: NgForm) {
     const { email, password } = form.value;
-    const user = this.authService.login(email, password);
-
-if (user) {
-  localStorage.setItem('userId', user.id || user.email); 
-  localStorage.setItem('userEmail', user.email);
-  this.router.navigate(['/mainpage']);
-} else {
-  this.loginError = true;
-}
+    this.authService.login(email, password).subscribe({
+      next: (user) => {
+        localStorage.setItem('userId', String(user.id));
+        localStorage.setItem('userEmail', user.email);
+        this.router.navigate(['/mainpage']);
+      },
+      error: () => {
+        this.loginError = true;
+      }
+    });
   }
-  
 }

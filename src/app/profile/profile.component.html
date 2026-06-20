@@ -19,7 +19,13 @@
         </mat-select>
       </mat-form-field>
   
+      <mat-form-field appearance="outline">
+        <mat-label>New Password (leave blank to keep current)</mat-label>
+        <input matInput type="password" [(ngModel)]="user.newPassword" placeholder="New password">
+      </mat-form-field>
+
       <button mat-raised-button color="accent" (click)="saveProfile()">Save</button>
+      <p *ngIf="saveSuccess" style="color: green; margin-top: 8px;">Profile updated!</p>
     </mat-card>
   
     <div class="my-games" *ngIf="purchasedGames.length > 0">

@@ -1,4 +1,7 @@
 export interface Review {
+  id?: number;
+  user_id?: number;
+  email?: string;
   username: string;
   comment: string;
   rating: number;
@@ -7,6 +10,7 @@ export interface Review {
 
 export interface Game {
   id: string;
+  slug?: string;
   title: string;
   description: string;
   price: number;

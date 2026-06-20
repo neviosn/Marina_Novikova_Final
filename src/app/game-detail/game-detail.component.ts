@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GameService } from './game.service';
-import { CartService } from '../cart.service'; 
+import { CartService } from '../cart.service';
 import { Game } from './game.model';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
@@ -15,6 +15,7 @@ import { AuthService } from '../auth/auth.service';
 })
 export class GameDetailComponent implements OnInit {
   gameId!: string;
+  gameDbId!: number;
 
   game: Game = {
     id: '',
@@ -28,38 +29,64 @@ export class GameDetailComponent implements OnInit {
   };
 
   fullStars: number[] = [];
-  halfStar: boolean = false;  
+  halfStar: boolean = false;
   emptyStars: number[] = [];
 
   newReview = {
     rating: 5,
     comment: ''
   };
-  
+
   isLoggedIn = false;
   userEmail: string | null = null;
+  currentUserId: number | null = null;
 
   constructor(
-    private route: ActivatedRoute, 
-    private gameService: GameService, 
+    private route: ActivatedRoute,
+    private gameService: GameService,
     private cartService: CartService,
     private router: Router,
     private authService: AuthService
    ) {}
 
   ngOnInit(): void {
+    this.isLoggedIn = !!localStorage.getItem('userEmail');
+    this.userEmail = this.authService.getUserEmail();
+    this.currentUserId = Number(localStorage.getItem('userId')) || null;
+
     this.route.params.subscribe((params) => {
       this.gameId = params['id'];
-      const foundGame = this.gameService.getGameById(this.gameId);
-      if (foundGame) {
-        this.game = foundGame;
-        this.prepareStars();
-      }
-    });
 
-    this.isLoggedIn = !!localStorage.getItem('userEmail');
-  this.game.reviews = this.gameService.getReviews(this.gameId); 
-  this.userEmail = this.authService.getUserEmail();
+      this.gameService.getGames().subscribe(dbGames => {
+        const dbGame = dbGames.find((g: any) => g.slug === this.gameId);
+        if (dbGame) {
+          this.gameDbId = dbGame.id;
+          this.game = {
+            id: dbGame.slug,
+            title: dbGame.title,
+            genre: dbGame.genre,
+            image: dbGame.image,
+            price: dbGame.price,
+            rating: dbGame.rating,
+            description: dbGame.description,
+            reviews: []
+          };
+          this.prepareStars();
+          this.loadReviews();
+        }
+      });
+    });
+  }
+
+  loadReviews(): void {
+    this.gameService.getReviewsFromDb(this.gameDbId).subscribe({
+      next: (reviews) => {
+        this.game.reviews = reviews;
+        console.log('Reviews:', reviews);
+        console.log('Current user ID:', this.currentUserId);
+      },
+      error: (err) => console.error('Failed to load reviews:', err)
+    });
   }
 
   prepareStars(): void {
@@ -80,26 +107,57 @@ export class GameDetailComponent implements OnInit {
       if (added) {
         this.router.navigate(['/cart']);
       } else {
-        alert('⚠️ This game is already in your cart!');
+        alert(' This game is already in your cart!');
       }
     }
   }
 
+  editingReview: any = null;
+
+  startEdit(review: any): void {
+    this.editingReview = { ...review };
+  }
+
+  cancelEdit(): void {
+    this.editingReview = null;
+  }
+
+  saveEdit(): void {
+    this.gameService.updateReviewInDb(this.editingReview.id, this.editingReview.comment, this.editingReview.rating).subscribe({
+      next: () => {
+        const idx = this.game.reviews.findIndex((r: any) => r.id === this.editingReview.id);
+        if (idx !== -1) this.game.reviews[idx] = { ...this.editingReview };
+        this.editingReview = null;
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+  deleteReview(reviewId: number): void {
+    this.gameService.deleteReviewFromDb(reviewId).subscribe({
+      next: () => {
+        this.game.reviews = this.game.reviews.filter((r: any) => r.id !== reviewId);
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
   submitReview(): void {
-    const username = localStorage.getItem('userEmail') || 'Anonymous';
+    const userId = localStorage.getItem('userId');
 
-  const review = {
-    username,
-    comment: this.newReview.comment,
-    rating: this.newReview.rating
-  };
+    const review = {
+      user_id: Number(userId),
+      game_id: this.gameDbId,
+      comment: this.newReview.comment,
+      rating: this.newReview.rating
+    };
 
-  this.game.reviews.push(review);
-  this.gameService.saveReviews(this.gameId, this.game.reviews);
-
-  this.newReview = { comment: '', rating: 5 }; 
-}
-
-  
-  
+    this.gameService.addReviewToDb(review).subscribe({
+      next: (savedReview) => {
+        this.game.reviews.push(savedReview);
+        this.newReview = { comment: '', rating: 5 };
+      },
+      error: (err) => console.error(err)
+    });
+  }
 }

@@ -25,24 +25,24 @@
     <div class="game-grid">
       <div class="game-card"
            *ngFor="let game of (filteredGames.length ? filteredGames : games) | searchFilter:searchTerm"
-           (click)="goToGame(game.id)">
+           (click)="goToGame(game.slug!)">
         <img [src]="game.image" alt="{{ game.title }}" />
         <h3>{{ game.title }}</h3>
       </div>
     </div>
   </section>
 
-  
+
 
   <ng-container *ngIf="!searchTerm && filteredGames.length === games.length">
     <section *ngFor="let category of categories" class="carousel-section">
       <h2>{{ category.name }}</h2>
-  
+
       <div class="carousel">
         <button class="arrow" (click)="cycleLeft(category)">←</button>
-  
+
         <div class="carousel-track">
-          <div class="game-card" *ngFor="let game of category.games" (click)="goToGame(game.id)">
+          <div class="game-card" *ngFor="let game of category.games" (click)="goToGame(game.slug!)">
             <img [src]="game.image" />
             <h3>{{ game.title }}</h3>
           </div>

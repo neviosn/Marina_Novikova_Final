@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class GameService {
@@ -114,12 +116,33 @@ export class GameService {
   }
 
   getReviews(gameId: string): any[] {
-    const stored = localStorage.getItem(`reviews-${gameId}`);
-    return stored ? JSON.parse(stored) : [];
-  }
+  const stored = localStorage.getItem(`reviews-${gameId}`);
+  return stored ? JSON.parse(stored) : [];
+}
+
+  getReviewsFromDb(gameId: number): Observable<any[]> {
+  return this.http.get<any[]>(`http://localhost:3000/reviews/${gameId}`);
+}
+
+addReviewToDb(review: any): Observable<any> {
+  return this.http.post<any>('http://localhost:3000/reviews', review);
+}
+
+updateReviewInDb(id: number, comment: string, rating: number): Observable<any> {
+  return this.http.put<any>(`http://localhost:3000/reviews/${id}`, { comment, rating });
+}
+
+deleteReviewFromDb(id: number): Observable<any> {
+  return this.http.delete<any>(`http://localhost:3000/reviews/${id}`);
+}
 
   saveReviews(gameId: string, reviews: any[]): void {
     localStorage.setItem(`reviews-${gameId}`, JSON.stringify(reviews));
   }
 
+  constructor(private http: HttpClient) {}
+
+getGames(): Observable<any[]> {
+  return this.http.get<any[]>('http://localhost:3000/games');
+}
 }

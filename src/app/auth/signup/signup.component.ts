@@ -10,20 +10,23 @@ import { AuthService } from '../auth.service';
   styleUrl: './signup.component.css'
 })
 export class SignupComponent {
+  registerError = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit(form: NgForm) {
-    const { id, fullName, email, password } = form.value;
-  
-    this.authService.register(id, email, password);
-  
-    localStorage.setItem('userId', id);
-    localStorage.setItem('userName', fullName);
-    localStorage.setItem('userEmail', email);
-  
-    this.router.navigate(['/login']);
+    const { fullName, email, password } = form.value;
+
+    this.authService.register(email, password).subscribe({
+      next: (user) => {
+        localStorage.setItem('userId', String(user.id));
+        localStorage.setItem('userName', fullName);
+        localStorage.setItem('userEmail', user.email);
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        this.registerError = err.status === 409 ? 'Email already exists' : 'Registration failed';
+      }
+    });
   }
-  
-  
 }

@@ -35,17 +35,26 @@ export class MainpageComponent implements OnInit {
   
   
 
-  constructor(private gameService: GameService, private router: Router) {}
+  constructor(
+  private gameService: GameService,
+  private router: Router
+) {}
 
   ngOnInit(): void {
-    this.games = this.gameService.getAllGames();
-    this.filteredGames = [...this.games];
+  console.log('MAINPAGE OPENED');
 
-    this.categories.forEach(category => {
-    const ids = this.categoryGameIds[category.name] || [];
-    category.games = ids
-      .map(id => this.games.find(g => g.id === id))
-      .filter((g): g is Game => !!g); 
+  this.gameService.getGames().subscribe({
+    next: (data) => {
+      console.log('Games from DB:', data);
+
+      this.games = data;
+      this.filteredGames = [...this.games];
+
+      this.categories.forEach(category => {
+        category.games = this.games.filter(g => g.genre === category.name);
+      });
+    },
+    error: (err) => console.error('DB ERROR:', err)
   });
 }
 
